@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
+import SearchBar from "./SearchBar";
 
 function Producto() {
     const [productos, setProductos] = useState([]); // Lista de productos
@@ -25,6 +26,7 @@ function Producto() {
             <ProductForm addProduct={agregarProducto} />
             {/* Lista de productos */}
             <ProductList productos={productos} />
+            <SearchBar productos={productos} />
         </div>
     );
 }
