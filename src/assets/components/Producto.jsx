@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
-import SearchBar from './SearchBar';
+//import SearchBar from './SearchBar';
 
 const Producto = () => {
     // Estado para la lista de productos
@@ -54,7 +54,7 @@ const Producto = () => {
     return (
       <div className="app">
         <h1>Gestor de Productos</h1>
-        <SearchBar searchTerm={terminoBusqueda} setSearchTerm={setTerminoBusqueda} />
+        {/*<SearchBar searchTerm={terminoBusqueda} setSearchTerm={setTerminoBusqueda} />*/}
         <ProductForm onSubmit={agregarOActualizarProducto} product={productoEditando} />
         <ProductList products={productosFiltrados} onDelete={eliminarProducto} onEdit={editarProducto} />
       </div>
