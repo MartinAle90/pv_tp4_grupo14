@@ -45,6 +45,22 @@ const Producto = () => {
     const eliminarProducto = id => {
       setProductos(prev => prev.filter(p => p.id !== id));
     };
+
+    //Eliminar Producto
+    const EliminarProducto = ({ id, onDelete }) => {
+      const manejarEliminar = () => {
+        if (window.confirm("¿Estás seguro/a de que deseas eliminar este producto?")) {
+          onDelete(id);
+        }
+      };
+    
+      return (
+        <button onClick={manejarEliminar}>
+          Eliminar
+        </button>
+      );
+    };
+    
   
     // Establecer producto a editar
     const editarProducto = producto => {
