@@ -1,32 +1,64 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
+import SearchBar from './SearchBar';
 
-function Producto() {
-    const [productos, setProductos] = useState([]); // Lista de productos
-
-    // Se usa useEffect para mostrar los cambios en el array de productos
-    // Se ejecuta cada vez que el array de productos cambia
+const Producto = () => {
+    // Estado para la lista de productos
+    const [productos, setProductos] = useState([]);
+  
+    // Estado para búsqueda
+    const [terminoBusqueda, setTerminoBusqueda] = useState('');
+  
+    // Estado para producto en edición
+    const [productoEditando, setProductoEditando] = useState(null);
+  
+    // Mostrar cambios en consola
     useEffect(() => {
-        console.log("Productos actualizados:", productos);
+      console.log('Productos actualizados:', productos);
     }, [productos]);
-
-    // Función para agregar un producto. Se usa useCallback para evitar recreaciones innecesarias
-    // las recreaciones se refieren a la creación de una nueva función en cada renderizado
-    const agregarProducto = (nuevoProducto) => {
-        setProductos((prevProductos) => [...prevProductos, nuevoProducto]);
+  
+    // Filtrado optimizado
+    const productosFiltrados = useMemo(() => {
+        return productos.filter(producto =>
+          producto.descripcion?.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+          producto.id?.toString().includes(terminoBusqueda)
+        );
+      }, [productos, terminoBusqueda]);
+  
+    // Agregar o actualizar producto
+    const agregarOActualizarProducto = producto => {
+      setProductos(prev => {
+        const existe = prev.findIndex(p => p.id === producto.id);
+        if (existe !== -1) {
+          const copia = [...prev];
+          copia[existe] = producto;
+          return copia;
+        } else {
+          return [...prev, producto];
+        }
+      });
+      setProductoEditando(null);
     };
-
-    //Lo que se muestra en la pantalla
+  
+    // Eliminar producto por ID
+    const eliminarProducto = id => {
+      setProductos(prev => prev.filter(p => p.id !== id));
+    };
+  
+    // Establecer producto a editar
+    const editarProducto = producto => {
+      setProductoEditando(producto);
+    };
+  
     return (
-        <div>
-            <h1>Gestión de Productos</h1>
-            {/* Formulario para agregar productos */}
-            <ProductForm addProduct={agregarProducto} />
-            {/* Lista de productos */}
-            <ProductList productos={productos} />
-        </div>
+      <div className="app">
+        <h1>Gestor de Productos</h1>
+        <SearchBar searchTerm={terminoBusqueda} setSearchTerm={setTerminoBusqueda} />
+        <ProductForm onSubmit={agregarOActualizarProducto} product={productoEditando} />
+        <ProductList products={productosFiltrados} onDelete={eliminarProducto} onEdit={editarProducto} />
+      </div>
     );
-}
-
+  };
+  
 export default Producto;
