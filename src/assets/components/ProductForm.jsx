@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 
-function ProductForm({ addProduct }) {
-    const [nuevoProducto, setNuevoProducto] = useState({
+let ProductForm = ({ onSubmit, product }) => {
+    // Estado del formulario
+    const [producto, setProducto] = useState({
         id: "",
         nombre: "",
         marca: "",
@@ -11,40 +12,56 @@ function ProductForm({ addProduct }) {
         estado: true,
     });
 
-    // Función para calcular el precio con descuento
+    // Cargar datos del producto a editar si existe
+    useEffect(() => {
+        if (product) {
+            setProducto(product);
+        } else {
+            setProducto({
+                id: "",
+                nombre: "",
+                marca: "",
+                precioUnitario: "",
+                descuento: "",
+                stock: "",
+                estado: true,
+            });
+        }
+    }, [product]);
+
+    // Calcular precio con descuento
     const calcularPrecioConDescuento = (precioUnitario, descuento) => {
         return precioUnitario * (1 - descuento / 100);
     };
 
-    const manejarSubmit = (evento) => {
+    // Manejar envío del formulario
+    const manejarEnvio = (evento) => {
         evento.preventDefault();
-        // Se verifica que todos los campos estén completos
+
+        // Validar que todos los campos estén completos
         if (
-            nuevoProducto.id &&
-            nuevoProducto.nombre &&
-            nuevoProducto.marca &&
-            nuevoProducto.precioUnitario &&
-            nuevoProducto.descuento &&
-            nuevoProducto.stock
+            producto.id &&
+            producto.nombre &&
+            producto.marca &&
+            producto.precioUnitario &&
+            producto.descuento &&
+            producto.stock
         ) {
-            // Si los campos estan completos, se crea un nuevo producto con los valores del formulario
-            const productoConDescuento = {
-                ...nuevoProducto,
-                precioUnitario: parseFloat(nuevoProducto.precioUnitario),
-                descuento: parseFloat(nuevoProducto.descuento),
-                stock: parseInt(nuevoProducto.stock, 10),
-                // Se calcula el precio con descuento llamando a la funcion calcularPrecioConDescuento
+            const productoProcesado = {
+                ...producto,
+                precioUnitario: parseFloat(producto.precioUnitario),
+                descuento: parseFloat(producto.descuento),
+                stock: parseInt(producto.stock, 10),
                 precioConDescuento: calcularPrecioConDescuento(
-                    parseFloat(nuevoProducto.precioUnitario),
-                    parseFloat(nuevoProducto.descuento)
+                    parseFloat(producto.precioUnitario),
+                    parseFloat(producto.descuento)
                 ),
             };
 
-            // Se agrega el nuevo producto a la lista
-            addProduct(productoConDescuento);
+            onSubmit(productoProcesado);
 
-            // Luego de agregar el producto, se reincian los campos del formulario
-            setNuevoProducto({
+            // Reiniciar el formulario
+            setProducto({
                 id: "",
                 nombre: "",
                 marca: "",
@@ -54,67 +71,61 @@ function ProductForm({ addProduct }) {
                 estado: true,
             });
         } else {
-            // Si no se completan todos los campos, se muestra un mensaje de alerta
             alert("Por favor, complete todos los campos.");
         }
     };
 
     return (
-        // Formulario para agregar un nuevo producto
-        // Se usa el evento onSubmit para manejar el envio del formulario
-        <form onSubmit={manejarSubmit}>
-            {/* Campos del formulario */}
-            {/* Se usan inputs controlados para manejar el estado del formulario */}
-            <h2>Agregar Producto</h2>
+        <form onSubmit={manejarEnvio}>
+            <h2>{product ? "Editar Producto" : "Agregar Producto"}</h2>
             <input
                 type="text"
                 placeholder="ID"
-                value={nuevoProducto.id}
-                onChange={(evento) => setNuevoProducto({ ...nuevoProducto, id: evento.target.value })}
+                value={producto.id}
+                onChange={(e) => setProducto({ ...producto, id: e.target.value })}
+                disabled={product} // Evita cambiar el ID si se está editando
             />
             <input
                 type="text"
                 placeholder="Nombre"
-                value={nuevoProducto.nombre}
-                onChange={(evento) => setNuevoProducto({ ...nuevoProducto, nombre: evento.target.value })}
+                value={producto.nombre}
+                onChange={(e) => setProducto({ ...producto, nombre: e.target.value })}
             />
             <input
                 type="text"
                 placeholder="Marca"
-                value={nuevoProducto.marca}
-                onChange={(evento) => setNuevoProducto({ ...nuevoProducto, marca: evento.target.value })}
+                value={producto.marca}
+                onChange={(e) => setProducto({ ...producto, marca: e.target.value })}
             />
             <input
                 type="number"
                 placeholder="Precio Unitario"
-                value={nuevoProducto.precioUnitario}
-                onChange={(evento) =>
-                    setNuevoProducto({ ...nuevoProducto, precioUnitario: evento.target.value })
-                }
+                value={producto.precioUnitario}
+                onChange={(e) => setProducto({ ...producto, precioUnitario: e.target.value })}
             />
             <input
                 type="number"
                 placeholder="Descuento (%)"
-                value={nuevoProducto.descuento}
-                onChange={(evento) => setNuevoProducto({ ...nuevoProducto, descuento: evento.target.value })}
+                value={producto.descuento}
+                onChange={(e) => setProducto({ ...producto, descuento: e.target.value })}
             />
             <input
                 type="number"
                 placeholder="Stock"
-                value={nuevoProducto.stock}
-                onChange={(evento) => setNuevoProducto({ ...nuevoProducto, stock: evento.target.value })}
+                value={producto.stock}
+                onChange={(e) => setProducto({ ...producto, stock: e.target.value })}
             />
             <label>
                 Estado:
                 <input
                     type="checkbox"
-                    checked={nuevoProducto.estado}
-                    onChange={(evento) => setNuevoProducto({ ...nuevoProducto, estado: evento.target.checked })}
+                    checked={producto.estado}
+                    onChange={(e) => setProducto({ ...producto, estado: e.target.checked })}
                 />
             </label>
-            <button type="submit">Agregar</button>
+            <button type="submit">{product ? "Actualizar" : "Agregar"}</button>
         </form>
     );
-}
+};
 
 export default ProductForm;
