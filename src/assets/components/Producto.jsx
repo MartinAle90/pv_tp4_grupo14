@@ -72,11 +72,15 @@ const Producto = () => {
         <div>
             <h1>Gestión de Productos</h1>
             {/* Formulario para agregar productos */}
-            <ProductForm addProduct={agregarProducto} />
+            <ProductForm
+            onSubmit={agregarOActualizarProducto}
+            product={productoEditando}
+            />
+
             {/* Lista de productos */}
             <ProductList productos={productos} />
             <SearchBar productos={productos} />
         </div>
-  };
-  
+    );
+};
 export default Producto;

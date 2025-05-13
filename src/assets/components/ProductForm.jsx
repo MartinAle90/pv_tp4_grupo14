@@ -60,6 +60,7 @@ let ProductForm = ({ onSubmit, product }) => {
 
             onSubmit(productoProcesado);
 
+            
             // Reiniciar el formulario
             setProducto({
                 id: "",
@@ -72,7 +73,7 @@ let ProductForm = ({ onSubmit, product }) => {
             });
         } else {
             alert("Por favor, complete todos los campos.");
-        }
+        }   
     };
 
     return (
