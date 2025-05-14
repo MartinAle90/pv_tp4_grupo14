@@ -9,7 +9,8 @@ function SearchBar({ productos }) {
     return productos.filter((producto) => {
       const nombre = producto.nombre?.toLowerCase() || "";
       const marca = producto.marca?.toLowerCase() || "";
-      return nombre.includes(lowerQuery) || marca.includes(lowerQuery);
+      const id = producto.id?.toString() || "";
+      return nombre.includes(lowerQuery) || marca.includes(lowerQuery) || id.includes(lowerQuery);
     });
   }, [productos, query]);
 
@@ -27,7 +28,7 @@ function SearchBar({ productos }) {
       <ul>
         {filteredProducts.map((p, i) => (
           <li key={p.id}>
-            <strong>{p.nombre}</strong> - {p.marca} - ${p.precioUnitario} -{" "}
+            <strong>{p.id}</strong> - <strong>{p.nombre}</strong> - {p.marca} - ${p.precioUnitario} -{" "}
             {p.descuento}% descuento - Precio con descuento: $
             {p.precioConDescuento.toFixed(2)} - Stock: {p.stock} -{" "}
             {p.estado ? "Activo" : "Inactivo"}

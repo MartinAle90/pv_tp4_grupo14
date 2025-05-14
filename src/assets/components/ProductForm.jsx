@@ -80,8 +80,9 @@ let ProductForm = ({ onSubmit, product }) => {
         <form onSubmit={manejarEnvio}>
             <h2>{product ? "Editar Producto" : "Agregar Producto"}</h2>
             <input
-                type="text"
+                type="number"
                 placeholder="ID"
+                min="1" // Asegura que el ID sea un número positivo
                 value={producto.id}
                 onChange={(e) => setProducto({ ...producto, id: e.target.value })}
                 disabled={product} // Evita cambiar el ID si se está editando
@@ -101,18 +102,23 @@ let ProductForm = ({ onSubmit, product }) => {
             <input
                 type="number"
                 placeholder="Precio Unitario"
+                min="0" // Asegura que el precio sea un número positivo
+                step="0.01" // Permite decimales
                 value={producto.precioUnitario}
                 onChange={(e) => setProducto({ ...producto, precioUnitario: e.target.value })}
             />
             <input
                 type="number"
                 placeholder="Descuento (%)"
+                min="0" // Asegura que el descuento sea un número positivo
+                max="100" // Asegura que el descuento no supere el 100%
                 value={producto.descuento}
                 onChange={(e) => setProducto({ ...producto, descuento: e.target.value })}
             />
             <input
                 type="number"
                 placeholder="Stock"
+                min="0" // Asegura que el stock sea un número positivo
                 value={producto.stock}
                 onChange={(e) => setProducto({ ...producto, stock: e.target.value })}
             />
