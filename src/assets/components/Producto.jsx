@@ -19,12 +19,26 @@ const Producto = () => {
   }, [productos]);
 
   // Filtrado optimizado
-  const productosFiltrados = useMemo(() => {
+ /* const productosFiltrados = useMemo(() => {
     return productos.filter(producto =>
       producto.descripcion?.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
       producto.id?.toString().includes(terminoBusqueda)
     );
+  }, [productos, terminoBusqueda]); */
+
+  // Filtrado optimizado con eliminación lógica
+  const productosFiltrados = useMemo(() => {
+    return productos
+      .filter(producto => producto.activo !== false) 
+      .filter(producto =>
+        producto.descripcion?.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+        producto.id?.toString().includes(terminoBusqueda)
+      );
   }, [productos, terminoBusqueda]);
+  
+
+
+  
 
   // Agregar o actualizar producto
   const agregarOActualizarProducto = producto => {
@@ -42,9 +56,20 @@ const Producto = () => {
   };
 
   // Eliminar producto por ID
-  const eliminarProducto = id => {
-    setProductos(prev => prev.filter(p => p.id !== id));
+  /*const eliminarProducto = id => {
+  setProductos(prev => prev.filter(p => p.id !== id));
+  };*/
+
+  //eliminación lógica
+  const eliminarProducto = (id) => {
+    setProductos(prev =>
+      prev.map(p =>
+        p.id === id ? { ...p, estado: false } : p
+      )
+    );
   };
+  
+
 
   // Establecer producto a editar
   const editarProducto = producto => {
