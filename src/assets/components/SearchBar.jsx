@@ -7,10 +7,16 @@ function SearchBar({ productos }) {
     const lowerQuery = query.toLowerCase();
 
     return productos.filter((producto) => {
+      if (!producto.estado) return false;
+
       const nombre = producto.nombre?.toLowerCase() || "";
       const marca = producto.marca?.toLowerCase() || "";
       const id = producto.id?.toString() || "";
-      return nombre.includes(lowerQuery) || marca.includes(lowerQuery) || id.includes(lowerQuery);
+      return (
+        nombre.includes(lowerQuery) ||
+        marca.includes(lowerQuery) ||
+        id.includes(lowerQuery)
+      );
     });
   }, [productos, query]);
 
@@ -26,11 +32,11 @@ function SearchBar({ productos }) {
       />
 
       <ul>
-        {filteredProducts.map((p, i) => (
+        {filteredProducts.map((p) => (
           <li key={p.id}>
-            <strong>{p.id}</strong> - <strong>{p.nombre}</strong> - {p.marca} - ${p.precioUnitario} -{" "}
-            {p.descuento}% descuento - Precio con descuento: $
-            {p.precioConDescuento.toFixed(2)} - Stock: {p.stock} -{" "}
+            <strong>{p.id}</strong> - <strong>{p.nombre}</strong> - {p.marca} -
+            ${p.precioUnitario} - {p.descuento}% descuento - Precio con
+            descuento: ${p.precioConDescuento.toFixed(2)} - Stock: {p.stock} -{" "}
             {p.estado ? "Activo" : "Inactivo"}
           </li>
         ))}
