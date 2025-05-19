@@ -9,7 +9,7 @@ let ProductForm = ({ onSubmit, product }) => {
         precioUnitario: "",
         descuento: "",
         stock: "",
-        estado: true,
+        estado:true,
     });
 
     // Cargar datos del producto a editar si existe
