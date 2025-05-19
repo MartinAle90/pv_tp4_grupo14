@@ -139,6 +139,7 @@ const ProductForm = ({ onSubmit, product }) => {
       <button type="submit">{product ? "Actualizar" : "Agregar"}</button>
     </form>
   );
+
 };
 
 export default ProductForm;
